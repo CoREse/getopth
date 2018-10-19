@@ -62,7 +62,7 @@ int getopth(int argc, char * const * argv, const optionH* options, int * longind
     unsigned l=0;
     while (long_options[l].name!=NULL) ++l;
     int result=getopt_long(argc,argv,short_options,long_options,longind);
-    if (*longind<l)
+    if (*longind<l && *longind>=0)
     {
         l=0;
         unsigned k=0;
@@ -70,7 +70,11 @@ int getopth(int argc, char * const * argv, const optionH* options, int * longind
         {
             if (options[l].name!=NULL)
             {
-                if (k++==*longind) return l;
+                if (k++==*longind)
+                {
+                    *longind=l;
+                    break;
+                }
             }
             ++l;
         }
@@ -94,11 +98,14 @@ void __show_help(const optionH* options, const char * usage, FILE* file)
             j = 2;
             if (options[i].has_arg != no_argument)
             {
-                fprintf(file, " ");
-                ++j;
                 if (options[i].has_arg == optional_argument)
                 {
                     fprintf(file, "[");
+                    ++j;
+                }
+                else
+                {
+                    fprintf(file, " ");
                     ++j;
                 }
                 if (options[i].arg_name == NULL)
@@ -129,7 +136,7 @@ void __show_help(const optionH* options, const char * usage, FILE* file)
 
         if (options[i].name != NULL)
         {
-            if (options[i].short_name!=0)
+            if (options[i].short_name != 0)
             {
                 fprintf(file, ",");
                 ++j;
