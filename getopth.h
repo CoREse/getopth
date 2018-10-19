@@ -33,7 +33,7 @@ struct help_args
     FILE* file;
 };
 extern void __show_help_var(struct help_args);
-#define show_help(...) __show_help_var((struct help_args){__VA_ARGS__});//(show_help(const optionH* options, const char * usage=NULL, file=stderr))
+#define show_help(/*const optionH* options, const char * usage=NULL, file=stderr*/...) __show_help_var((struct help_args){__VA_ARGS__});//()
 
 extern char * get_short_opts(const optionH* options);//will return an allocated string, remember to free the space after
 

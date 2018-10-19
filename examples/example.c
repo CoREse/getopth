@@ -14,7 +14,7 @@ int main (int argc, char * const * argv)
     int longind;
     int option;
     FILE* fp_help=stderr;
-    while ((option= getopth(argc,argv,&options,&longind))>=0)
+    while ((option= getopth(argc,argv,options,&longind))>=0)
     {
         if (option == 'b')
         {
@@ -49,6 +49,7 @@ int main (int argc, char * const * argv)
             }
         }
     }
-    if (argc == optind)
-        show_help(&options, "Usage: example [options] filename", fp_help) return 0;
+    if (argc == optind || stdout==fp_help)
+        show_help(options, "Usage: example [options] filename", fp_help);
+    return fp_help==stdout?0:1;
 }
